@@ -28,7 +28,7 @@
             align-items: center;
             justify-content: center;
             color: var(--text-color);
-            overflow: hidden;
+            /* overflow: hidden; */
         }
 
         @keyframes gradientBG {
@@ -48,7 +48,7 @@
         .container {
             width: 100%;
             max-width: 800px;
-            padding: 20px;
+            padding: 10px;
             perspective: 1000px;
         }
 
@@ -59,7 +59,7 @@
             border: 1px solid var(--glass-border);
             border-radius: 20px;
             box-shadow: var(--card-shadow);
-            padding: 40px;
+            padding: 20px;
             text-align: center;
             display: flex;
             flex-direction: column;
@@ -82,7 +82,7 @@
             border-radius: 15px;
             overflow: hidden;
             position: relative;
-            margin-bottom: 30px;
+            margin-bottom: 10px;
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
             display: none;
             /* Hidden by default, toggled via JS */
@@ -110,7 +110,7 @@
         /* Profile Circle Styles */
         .photo-container {
             width: 120px;
-            height: 80px;
+            height: 120px;
             border-radius: 50%;
             overflow: hidden;
             border: 4px solid rgba(255, 255, 255, 0.5);
@@ -289,7 +289,7 @@
             "Your stories about cycling and your dogs brought such a refreshing personal touch.",
             "Your energy, humor and curiosity made the whole experience even more memorable.",
             "It’s genuinely inspiring to see someone so fit, sharp and full of life — There’s so much to learn from how you think, how you lead and how you connect ideas so naturally with people.",
-            "Your insights on how to make TR more customer centric and how to make TR more data driven were both insightful and inspiring.",
+            "Your insights on how to make TR more people centric and how to make TRGSSC more strategic were both insightful and inspiring.",
             "If at any point you see an opportunity or get any idea to solve a TR challenge through automation and simplification...",
             "...anything beyond what we already presented as part of our 2026 automation journey — I’d be more than happy to contribute or support in any way I can.",
             "Wishing you many more rides on the bicycle and many more impactful miles in shaping Total Rewards globally.",
@@ -309,12 +309,13 @@
         const totalSlides = 3;
 
         function rotateCarousel() {
-            carouselIndex = (carouselIndex + 1) % totalSlides;
+            // Sync carousel with current message index
+            carouselIndex = currentIndex % totalSlides;
             const translateX = -(carouselIndex * 100);
             carouselTrack.style.transform = `translateX(${translateX}%)`;
         }
 
-        setInterval(rotateCarousel, 3000); // Rotate every 3 seconds
+        // setInterval(rotateCarousel, 3000); // Removed automatic rotation
 
         // Initialize Dots
         function initDots() {
@@ -358,6 +359,7 @@
             updateButtons();
             updateDots();
             updateVisibility();
+            rotateCarousel();
         }
 
         function updateVisibility() {
@@ -402,6 +404,7 @@
         messageText.innerHTML = messages[0];
         updateButtons();
         updateVisibility();
+        rotateCarousel();
 
         // Keyboard navigation
         document.addEventListener('keydown', (e) => {
