@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Message for James</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --text-color: #ffffff;
+            --card-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(45deg, #ff9a9e 0%, #fad0c4 99%, #fad0c4 100%);
+            background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-color);
+            overflow: hidden;
+        }
+
+        @keyframes gradientBG {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        .container {
+            width: 100%;
+            max-width: 800px;
+            padding: 20px;
+            perspective: 1000px;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            box-shadow: var(--card-shadow);
+            padding: 40px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 400px;
+            /* Increased height for carousel */
+            position: relative;
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        /* Big Carousel Styles */
+        .big-carousel {
+            width: 100%;
+            max-width: 500px;
+            height: 300px;
+            border-radius: 15px;
+            overflow: hidden;
+            position: relative;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+            display: none;
+            /* Hidden by default, toggled via JS */
+            animation: fadeIn 0.5s ease forwards;
+        }
+
+        .carousel-track {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+        }
+
+        .carousel-slide {
+            min-width: 100%;
+            height: 100%;
+        }
+
+        .carousel-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Profile Circle Styles */
+        .photo-container {
+            width: 120px;
+            height: 80px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 4px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            margin-bottom: 30px;
+            flex-shrink: 0;
+            display: none;
+            /* Hidden by default */
+            animation: fadeIn 0.5s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .photo-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .message-area {
+            flex-grow: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .message-content {
+            font-size: 1.1rem;
+            line-height: 1.3;
+            font-weight: 300;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+            position: absolute;
+            width: 100%;
+            padding: 0 20px;
+        }
+
+        .message-content.active {
+            opacity: 1;
+            transform: translateY(0);
+            position: relative;
+        }
+
+        .controls {
+            display: flex;
+            gap: 20px;
+            margin-top: 30px;
+            z-index: 10;
+        }
+
+        .btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            backdrop-filter: blur(5px);
+        }
+
+        .btn:hover:not(:disabled) {
+            background: rgba(255, 255, 255, 0.4);
+            transform: scale(1.05);
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+        }
+
+        .btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .progress-dots {
+            display: flex;
+            gap: 8px;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+
+        .dot {
+            width: 8px;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+
+        .dot.active {
+            background: #fff;
+            transform: scale(1.3);
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .message-content {
+                font-size: 1.1rem;
+            }
+
+            .card {
+                padding: 20px;
+                min-height: 300px;
+            }
+
+            .big-carousel {
+                height: 150px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="card">
+
+            <!-- Big Photo Carousel -->
+            <div class="big-carousel" id="bigCarousel">
+                <div class="carousel-track" id="carouselTrack">
+                    <div class="carousel-slide"><img src="Picture 1.jpeg" alt="Memory 1"></div>
+                    <div class="carousel-slide"><img src="Picture 2.jpeg" alt="Memory 2"></div>
+                    <div class="carousel-slide"><img src="Picture 3.jpeg" alt="Memory 3"></div>
+                </div>
+            </div>
+
+            <!-- Profile Circle (Deepak) -->
+            <div class="photo-container" id="photoContainer">
+                <img id="profileImage" src="Deepakphoto.jpg" alt="Deepak"
+                    onerror="this.src='https://ui-avatars.com/api/?name=Deepak&background=random&size=200'">
+            </div>
+
+            <div class="progress-dots" id="dotsContainer"></div>
+
+            <div class="message-area">
+                <div id="messageText" class="message-content active">
+                    <!-- Text will be injected here -->
+                </div>
+            </div>
+
+            <div class="controls">
+                <button class="btn" id="prevBtn" disabled>
+                    &#8592; Prev
+                </button>
+                <button class="btn" id="nextBtn">
+                    Next &#8594;
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const messages = [
+            "Hi James, <br><br>Hope you had a safe and comfortable flight back home.",
+            "It was truly a pleasure meeting you during your visit to India — the townhall and dinner were both engaging and inspiring.",
+            "Your stories about cycling and your dogs brought such a refreshing personal touch.",
+            "Your energy, humor and curiosity made the whole experience even more memorable.",
+            "It’s genuinely inspiring to see someone so fit, sharp and full of life — There’s so much to learn from how you think, how you lead and how you connect ideas so naturally with people.",
+            "Your insights on how to make TR more customer centric and how to make TR more data driven were both insightful and inspiring.",
+            "If at any point you see an opportunity or get any idea to solve a TR challenge through automation and simplification...",
+            "...anything beyond what we already presented as part of our 2026 automation journey — I’d be more than happy to contribute or support in any way I can.",
+            "Wishing you many more rides on the bicycle and many more impactful miles in shaping Total Rewards globally.",
+            "Warm regards,<br><br><strong>Deepak</strong>"
+        ];
+        let currentIndex = 0;
+        const messageText = document.getElementById('messageText');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const dotsContainer = document.getElementById('dotsContainer');
+        const photoContainer = document.getElementById('photoContainer');
+        const bigCarousel = document.getElementById('bigCarousel');
+        const carouselTrack = document.getElementById('carouselTrack');
+
+        // Carousel Logic
+        let carouselIndex = 0;
+        const totalSlides = 3;
+
+        function rotateCarousel() {
+            carouselIndex = (carouselIndex + 1) % totalSlides;
+            const translateX = -(carouselIndex * 100);
+            carouselTrack.style.transform = `translateX(${translateX}%)`;
+        }
+
+        setInterval(rotateCarousel, 3000); // Rotate every 3 seconds
+
+        // Initialize Dots
+        function initDots() {
+            dotsContainer.innerHTML = '';
+            messages.forEach((_, index) => {
+                const dot = document.createElement('div');
+                dot.classList.add('dot');
+                if (index === 0) dot.classList.add('active');
+                dotsContainer.appendChild(dot);
+            });
+        }
+
+        function updateDots() {
+            const dots = document.querySelectorAll('.dot');
+            dots.forEach((dot, index) => {
+                dot.classList.toggle('active', index === currentIndex);
+            });
+        }
+
+        function showMessage(index, direction) {
+            // Fade out
+            messageText.style.opacity = '0';
+            messageText.style.transform = direction === 'next' ? 'translateX(-30px)' : 'translateX(30px)';
+
+            setTimeout(() => {
+                messageText.innerHTML = messages[index];
+
+                // Reset position for entry animation
+                messageText.style.transition = 'none';
+                messageText.style.transform = direction === 'next' ? 'translateX(30px)' : 'translateX(-30px)';
+
+                // Force reflow
+                void messageText.offsetWidth;
+
+                // Fade in
+                messageText.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                messageText.style.opacity = '1';
+                messageText.style.transform = 'translateX(0)';
+            }, 300);
+
+            updateButtons();
+            updateDots();
+            updateVisibility();
+        }
+
+        function updateVisibility() {
+            // Last message: Show Deepak's circle, Hide Carousel
+            if (currentIndex === messages.length - 1) {
+                photoContainer.style.display = 'block';
+                bigCarousel.style.display = 'none';
+            } else {
+                // Other messages: Show Carousel, Hide Deepak's circle
+                photoContainer.style.display = 'none';
+                bigCarousel.style.display = 'block';
+            }
+        }
+
+        function updateButtons() {
+            prevBtn.disabled = currentIndex === 0;
+            nextBtn.disabled = currentIndex === messages.length - 1;
+
+            if (currentIndex === messages.length - 1) {
+                nextBtn.innerHTML = 'Done &#10003;';
+            } else {
+                nextBtn.innerHTML = 'Next &#8594;';
+            }
+        }
+
+        nextBtn.addEventListener('click', () => {
+            if (currentIndex < messages.length - 1) {
+                currentIndex++;
+                showMessage(currentIndex, 'next');
+            }
+        });
+
+        prevBtn.addEventListener('click', () => {
+            if (currentIndex > 0) {
+                currentIndex--;
+                showMessage(currentIndex, 'prev');
+            }
+        });
+
+        // Initialize
+        initDots();
+        messageText.innerHTML = messages[0];
+        updateButtons();
+        updateVisibility();
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' && !nextBtn.disabled) nextBtn.click();
+            if (e.key === 'ArrowLeft' && !prevBtn.disabled) prevBtn.click();
+        });
+
+    </script>
+</body>
+
+</html>
